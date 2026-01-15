@@ -2,12 +2,12 @@
 
 **Quick App Installer for Windows** - Install 100+ popular apps with one click using Windows Package Manager (winget).
 
-![.NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4)
-![WPF](https://img.shields.io/badge/WPF-Windows-0078D4)
-![License](https://img.shields.io/badge/License-MIT-green)
-
 <p align="center">
   <img src="WinKit/Resources/winkit.png" alt="WinKit Logo" width="128"/>
+  <br><br>
+  <a href="#"><img src="https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet" alt=".NET 8.0"></a>
+  <a href="#"><img src="https://img.shields.io/badge/WPF-Windows-0078D4?style=for-the-badge&logo=windows" alt="WPF"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-green?style=for-the-badge" alt="License"></a>
 </p>
 
 ## Features
