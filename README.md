@@ -7,7 +7,7 @@
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 <p align="center">
-  <img src="Resources/winkit.png" alt="WinKit Logo" width="128"/>
+  <img src="WinKit/Resources/winkit.png" alt="WinKit Logo" width="128"/>
 </p>
 
 ## Features
