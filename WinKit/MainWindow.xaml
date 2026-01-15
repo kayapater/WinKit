@@ -1,0 +1,331 @@
+<Window x:Class="WinKit.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:local="clr-namespace:WinKit"
+        Title="WinKit" 
+        Height="720" Width="1050"
+        MinHeight="500" MinWidth="800"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource BackgroundBrush}"
+        Icon="Resources/winkit.ico">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
+        <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+        <local:StringToColorConverter x:Key="StringToColor"/>
+        
+        <Style x:Key="ModernScrollBarThumb" TargetType="Thumb">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="IsTabStop" Value="False"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Border x:Name="thumbBorder" 
+                                Background="{DynamicResource BorderBrush}" 
+                                CornerRadius="4" 
+                                Margin="2"/>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="thumbBorder" Property="Background" Value="{DynamicResource TextSecondaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsDragging" Value="True">
+                                <Setter TargetName="thumbBorder" Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernScrollBar" TargetType="ScrollBar">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Width" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid>
+                            <Border Background="Transparent" CornerRadius="5"/>
+                            <Track x:Name="PART_Track" IsDirectionReversed="True">
+                                <Track.Thumb>
+                                    <Thumb Style="{StaticResource ModernScrollBarThumb}"/>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernScrollViewer" TargetType="ScrollViewer">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollViewer">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <ScrollContentPresenter Grid.Column="0" Margin="{TemplateBinding Padding}"/>
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                       Grid.Column="1"
+                                       Style="{StaticResource ModernScrollBar}"
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Margin="20,24,20,20">
+                    <TextBlock Text="⚡ WinKit" 
+                               FontSize="18" FontWeight="Bold" 
+                               Foreground="{DynamicResource TextPrimaryBrush}"/>
+                    <TextBlock Text="Quick App Installer" 
+                               FontSize="11" Margin="0,4,0,0"
+                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                </StackPanel>
+
+                <ListBox x:Name="CategoryList" Grid.Row="1" 
+                         Background="Transparent" BorderThickness="0"
+                         SelectionChanged="CategoryList_SelectionChanged"
+                         Margin="8,0">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="Margin" Value="0,2"/>
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="Bd" Background="Transparent" 
+                                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                            </Trigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                    <Condition Property="IsSelected" Value="False"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter TargetName="Bd" Property="Background" Value="{DynamicResource HoverBrush}"/>
+                                            </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+
+                <StackPanel Grid.Row="2" Margin="16,16">
+                    <Button x:Name="ThemeToggleBtn" Click="ThemeToggle_Click" 
+                            Background="Transparent" BorderThickness="0" 
+                            HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,12">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ThemeIcon" Text="🌙" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Text="Tema Değiştir" Margin="8,0,0,0" FontSize="12"
+                                       Foreground="{DynamicResource TextSecondaryBrush}" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    
+                    <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="12">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse x:Name="WingetStatusDot" Width="8" Height="8" 
+                                         Fill="{DynamicResource WarningBrush}" VerticalAlignment="Center"/>
+                                <TextBlock x:Name="WingetStatusText" Text="Winget kontrol ediliyor..." 
+                                           Margin="8,0,0,0" FontSize="12"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" Padding="24,20">
+                <Grid>
+                    <StackPanel>
+                        <TextBlock x:Name="CategoryTitle" Text="Tüm Programlar" 
+                                   FontSize="22" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <TextBlock x:Name="ProgramCount" Text="" 
+                                   FontSize="13" Margin="0,4,0,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Content="Tümünü Seç" Click="SelectAll_Click" 
+                                Background="Transparent" Foreground="{DynamicResource PrimaryBrush}"
+                                BorderThickness="0" Cursor="Hand" FontSize="12" FontWeight="Medium"/>
+                        <Button Content="Seçimi Kaldır" Click="DeselectAll_Click" Margin="16,0,0,0"
+                                Background="Transparent" Foreground="{DynamicResource TextSecondaryBrush}"
+                                BorderThickness="0" Cursor="Hand" FontSize="12"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="24,0"
+                          Style="{StaticResource ModernScrollViewer}">
+                <ItemsControl x:Name="ProgramsControl">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{DynamicResource CardBrush}" 
+                                    CornerRadius="10" Margin="0,0,12,12" 
+                                    Width="230" Cursor="Hand"
+                                    MouseLeftButtonDown="ProgramCard_Click"
+                                    BorderBrush="{DynamicResource BorderBrush}"
+                                    BorderThickness="1">
+                                <Grid Margin="14">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8"
+                                            Background="{Binding BrandColor, Converter={StaticResource StringToColor}}">
+                                        <Image Source="{Binding IconPath}" 
+                                               Width="24" Height="24"
+                                               Visibility="{Binding HasPngIcon, Converter={StaticResource BoolToVisibility}}"
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                    </Border>
+                                    
+                                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8"
+                                            Background="{Binding BrandColor, Converter={StaticResource StringToColor}}"
+                                            Visibility="{Binding HasPngIcon, Converter={StaticResource InverseBoolToVisibility}}">
+                                        <icon:PackIconSimpleIcons Kind="{Binding IconKind}" 
+                                                                  Width="20" Height="20"
+                                                                  Foreground="White"
+                                                                  HorizontalAlignment="Center"
+                                                                  VerticalAlignment="Center"/>
+                                    </Border>
+
+                                    <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Name}" 
+                                                   FontSize="13" FontWeight="Medium"
+                                                   Foreground="{DynamicResource TextPrimaryBrush}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Description}" 
+                                                   FontSize="11" Margin="0,2,0,0"
+                                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+
+                                    <CheckBox Grid.Column="2" IsChecked="{Binding IsSelected}" 
+                                              VerticalAlignment="Center" IsHitTestVisible="False">
+                                        <CheckBox.Template>
+                                            <ControlTemplate TargetType="CheckBox">
+                                                <Border x:Name="border" Width="22" Height="22" 
+                                                        CornerRadius="6"
+                                                        Background="{DynamicResource CheckboxBgBrush}"
+                                                        BorderBrush="{DynamicResource BorderBrush}"
+                                                        BorderThickness="1">
+                                                    <TextBlock x:Name="check" Text="✓" 
+                                                               FontSize="14" FontWeight="Bold"
+                                                               Foreground="White"
+                                                               HorizontalAlignment="Center" 
+                                                               VerticalAlignment="Center"
+                                                               Visibility="Collapsed"/>
+                                                </Border>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter TargetName="check" Property="Visibility" Value="Visible"/>
+                                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                        <Setter TargetName="border" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </CheckBox.Template>
+                                    </CheckBox>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Border Grid.Row="2" Background="{DynamicResource CardBrush}" 
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
+                <Grid Margin="24,16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="SelectedCountText" Text="0 program seçildi" 
+                                   FontSize="14" FontWeight="Medium"
+                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        
+                        <Grid Height="6" Margin="0,8,0,0" MaxWidth="400" HorizontalAlignment="Left">
+                            <Border Background="{DynamicResource ProgressBgBrush}" CornerRadius="3"/>
+                            <Border x:Name="ProgressBar" Background="{DynamicResource AccentBrush}" 
+                                    CornerRadius="3" HorizontalAlignment="Left" Width="0"/>
+                        </Grid>
+                        <TextBlock x:Name="StatusText" Text="" FontSize="11" Margin="0,4,0,0"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+
+                    <Button x:Name="InstallBtn" Grid.Column="1" 
+                            Click="Install_Click" IsEnabled="False"
+                            Padding="28,14" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="{DynamicResource AccentBrush}" 
+                                        CornerRadius="10" Padding="{TemplateBinding Padding}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="⬇" FontSize="14" Margin="0,0,8,0" Foreground="White"/>
+                                        <TextBlock Text="Seçilenleri Yükle" FontSize="14" FontWeight="SemiBold" Foreground="White"/>
+                                    </StackPanel>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
