@@ -7,14 +7,14 @@
         Height="720" Width="1050"
         MinHeight="500" MinWidth="800"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource BackgroundBrush}"
-        Icon="Resources/winkit.ico">
+        Background="{DynamicResource BackgroundBrush}">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVisibility"/>
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
         <local:StringToColorConverter x:Key="StringToColor"/>
         
+        <!-- Modern ScrollBar Style -->
         <Style x:Key="ModernScrollBarThumb" TargetType="Thumb">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
             <Setter Property="IsTabStop" Value="False"/>
@@ -87,6 +87,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!-- Sidebar -->
         <Border Grid.Column="0" Background="{DynamicResource SidebarBrush}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -95,15 +96,17 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
+                <!-- Logo & Title -->
                 <StackPanel Grid.Row="0" Margin="20,24,20,20">
                     <TextBlock Text="⚡ WinKit" 
-                               FontSize="18" FontWeight="Bold" 
+                               FontSize="20" FontWeight="Bold" 
                                Foreground="{DynamicResource TextPrimaryBrush}"/>
-                    <TextBlock Text="Quick App Installer" 
+                    <TextBlock Text="Windows uygulama yükleyici" 
                                FontSize="11" Margin="0,4,0,0"
                                Foreground="{DynamicResource TextSecondaryBrush}"/>
                 </StackPanel>
 
+                <!-- Categories -->
                 <ListBox x:Name="CategoryList" Grid.Row="1" 
                          Background="Transparent" BorderThickness="0"
                          SelectionChanged="CategoryList_SelectionChanged"
@@ -139,7 +142,9 @@
                     </ListBox.ItemContainerStyle>
                 </ListBox>
 
+                <!-- Theme Toggle & Winget Status -->
                 <StackPanel Grid.Row="2" Margin="16,16">
+                    <!-- Theme Toggle -->
                     <Button x:Name="ThemeToggleBtn" Click="ThemeToggle_Click" 
                             Background="Transparent" BorderThickness="0" 
                             HorizontalAlignment="Left" Cursor="Hand" Margin="0,0,0,12">
@@ -150,6 +155,7 @@
                         </StackPanel>
                     </Button>
                     
+                    <!-- Winget Status -->
                     <Border Background="{DynamicResource CardBrush}" CornerRadius="8" Padding="12">
                         <StackPanel>
                             <StackPanel Orientation="Horizontal">
@@ -165,6 +171,7 @@
             </Grid>
         </Border>
 
+        <!-- Main Content -->
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -172,6 +179,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
+            <!-- Header -->
             <Border Grid.Row="0" Padding="24,20">
                 <Grid>
                     <StackPanel>
@@ -183,6 +191,7 @@
                                    Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
                     
+                    <!-- Quick Actions -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                         <Button Content="Tümünü Seç" Click="SelectAll_Click" 
                                 Background="Transparent" Foreground="{DynamicResource PrimaryBrush}"
@@ -194,6 +203,7 @@
                 </Grid>
             </Border>
 
+            <!-- Programs Grid -->
             <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="24,0"
                           Style="{StaticResource ModernScrollViewer}">
                 <ItemsControl x:Name="ProgramsControl">
@@ -217,14 +227,17 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!-- Icon -->
                                     <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8"
                                             Background="{Binding BrandColor, Converter={StaticResource StringToColor}}">
+                                        <!-- PNG Icon -->
                                         <Image Source="{Binding IconPath}" 
                                                Width="24" Height="24"
                                                Visibility="{Binding HasPngIcon, Converter={StaticResource BoolToVisibility}}"
                                                RenderOptions.BitmapScalingMode="HighQuality"/>
                                     </Border>
                                     
+                                    <!-- SimpleIcons Fallback (behind PNG) -->
                                     <Border Grid.Column="0" Width="40" Height="40" CornerRadius="8"
                                             Background="{Binding BrandColor, Converter={StaticResource StringToColor}}"
                                             Visibility="{Binding HasPngIcon, Converter={StaticResource InverseBoolToVisibility}}">
@@ -235,6 +248,7 @@
                                                                   VerticalAlignment="Center"/>
                                     </Border>
 
+                                    <!-- Name & Description -->
                                     <StackPanel Grid.Column="1" Margin="12,0" VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Name}" 
                                                    FontSize="13" FontWeight="Medium"
@@ -246,6 +260,7 @@
                                                    TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
 
+                                    <!-- Checkbox -->
                                     <CheckBox Grid.Column="2" IsChecked="{Binding IsSelected}" 
                                               VerticalAlignment="Center" IsHitTestVisible="False">
                                         <CheckBox.Template>
@@ -279,6 +294,7 @@
                 </ItemsControl>
             </ScrollViewer>
 
+            <!-- Footer -->
             <Border Grid.Row="2" Background="{DynamicResource CardBrush}" 
                     BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
                 <Grid Margin="24,16">
@@ -287,11 +303,13 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
+                    <!-- Progress Info -->
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock x:Name="SelectedCountText" Text="0 program seçildi" 
                                    FontSize="14" FontWeight="Medium"
                                    Foreground="{DynamicResource TextPrimaryBrush}"/>
                         
+                        <!-- Progress Bar -->
                         <Grid Height="6" Margin="0,8,0,0" MaxWidth="400" HorizontalAlignment="Left">
                             <Border Background="{DynamicResource ProgressBgBrush}" CornerRadius="3"/>
                             <Border x:Name="ProgressBar" Background="{DynamicResource AccentBrush}" 
@@ -301,6 +319,7 @@
                                    Foreground="{DynamicResource TextSecondaryBrush}"/>
                     </StackPanel>
 
+                    <!-- Install Button -->
                     <Button x:Name="InstallBtn" Grid.Column="1" 
                             Click="Install_Click" IsEnabled="False"
                             Padding="28,14" Cursor="Hand">

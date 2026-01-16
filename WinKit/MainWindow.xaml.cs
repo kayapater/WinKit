@@ -24,8 +24,10 @@ namespace WinKit
         private bool _isInstalling = false;
         private CancellationTokenSource? _cancellationTokenSource;
         
+        // Simple Icons mapping - WingetId -> PackIconSimpleIconsKind
         private static readonly Dictionary<string, PackIconSimpleIconsKind> IconMapping = new()
         {
+            // Tarayıcılar
             {"Google.Chrome", PackIconSimpleIconsKind.GoogleChrome},
             {"Mozilla.Firefox", PackIconSimpleIconsKind.Firefox},
             {"Brave.Brave", PackIconSimpleIconsKind.Brave},
@@ -35,6 +37,7 @@ namespace WinKit
             {"VivaldiTechnologies.Vivaldi", PackIconSimpleIconsKind.Vivaldi},
             {"TheBrowserCompany.Arc", PackIconSimpleIconsKind.Arc},
             
+            // İletişim
             {"Discord.Discord", PackIconSimpleIconsKind.Discord},
             {"Telegram.TelegramDesktop", PackIconSimpleIconsKind.Telegram},
             {"WhatsApp.WhatsApp", PackIconSimpleIconsKind.WhatsApp},
@@ -44,6 +47,7 @@ namespace WinKit
             {"TeamViewer.TeamViewer", PackIconSimpleIconsKind.TeamViewer},
             {"OpenWhisperSystems.Signal", PackIconSimpleIconsKind.Signal},
             
+            // Oyun Platformları
             {"Valve.Steam", PackIconSimpleIconsKind.Steam},
             {"EpicGames.EpicGamesLauncher", PackIconSimpleIconsKind.EpicGames},
             {"ElectronicArts.EADesktop", PackIconSimpleIconsKind.Ea},
@@ -57,6 +61,7 @@ namespace WinKit
             {"Tencent.Gameloop", PackIconSimpleIconsKind.TencentQq},
             {"ParadoxInteractive.ParadoxLauncher", PackIconSimpleIconsKind.Windows11},
             
+            // GPU & Sürücüler
             {"Nvidia.GeForceExperience", PackIconSimpleIconsKind.Nvidia},
             {"Nvidia.Broadcast", PackIconSimpleIconsKind.Nvidia},
             {"AMD.RyzenMaster", PackIconSimpleIconsKind.Amd},
@@ -69,6 +74,7 @@ namespace WinKit
             {"Geeks3D.FurMark", PackIconSimpleIconsKind.Windows11},
             {"Guru3D.RTSS", PackIconSimpleIconsKind.Speedtest},
             
+            // Geliştirme
             {"Microsoft.VisualStudioCode", PackIconSimpleIconsKind.VisualStudioCode},
             {"Microsoft.VisualStudio.2022.Community", PackIconSimpleIconsKind.VisualStudio},
             {"Anysphere.Cursor", PackIconSimpleIconsKind.Windows11},
@@ -91,6 +97,7 @@ namespace WinKit
             {"EclipseAdoptium.Temurin.21.JDK", PackIconSimpleIconsKind.EclipseIde},
             {"WixToolset.WiX", PackIconSimpleIconsKind.Windows11},
             
+            // Multimedya
             {"VideoLAN.VLC", PackIconSimpleIconsKind.VlcMediaPlayer},
             {"Spotify.Spotify", PackIconSimpleIconsKind.Spotify},
             {"OBSProject.OBSStudio", PackIconSimpleIconsKind.ObsStudio},
@@ -104,6 +111,7 @@ namespace WinKit
             {"NickeManarin.ScreenToGif", PackIconSimpleIconsKind.Windows11},
             {"Adobe.CreativeCloud", PackIconSimpleIconsKind.Adobe},
             
+            // Dosya Araçları
             {"7zip.7zip", PackIconSimpleIconsKind._7Zip},
             {"RARLab.WinRAR", PackIconSimpleIconsKind.Windows11},
             {"voidtools.Everything", PackIconSimpleIconsKind.Windows11},
@@ -114,6 +122,7 @@ namespace WinKit
             {"Syncthing.Syncthing", PackIconSimpleIconsKind.Syncthing},
             {"DigitalVolcano.DuplicateCleaner", PackIconSimpleIconsKind.Windows11},
             
+            // Sistem Araçları
             {"Microsoft.PowerToys", PackIconSimpleIconsKind.Windows11},
             {"CPUID.CPU-Z", PackIconSimpleIconsKind.Windows11},
             {"CPUID.HWMonitor", PackIconSimpleIconsKind.Windows11},
@@ -127,6 +136,7 @@ namespace WinKit
             {"Razer.Synapse3", PackIconSimpleIconsKind.Razer},
             {"CheatEngine.CheatEngine", PackIconSimpleIconsKind.Windows11},
             
+            // Güvenlik & VPN
             {"Bitwarden.Bitwarden", PackIconSimpleIconsKind.Bitwarden},
             {"ProtonTechnologies.ProtonVPN", PackIconSimpleIconsKind.Proton},
             {"NordVPN.NordVPN", PackIconSimpleIconsKind.NordVpn},
@@ -135,6 +145,7 @@ namespace WinKit
             {"Cloudflare.Warp", PackIconSimpleIconsKind.Cloudflare},
             {"WireGuard.WireGuard", PackIconSimpleIconsKind.WireGuard},
             
+            // Ofis & Üretkenlik
             {"Notion.Notion", PackIconSimpleIconsKind.Notion},
             {"Obsidian.Obsidian", PackIconSimpleIconsKind.Obsidian},
             {"Adobe.Acrobat.Reader.64-bit", PackIconSimpleIconsKind.AdobeAcrobatReader},
@@ -189,6 +200,7 @@ namespace WinKit
 
             _allPrograms = new ObservableCollection<ProgramItem>
             {
+                // Tarayıcılar
                 new ProgramItem { Name = "Google Chrome", WingetId = "Google.Chrome", Category = "browsers", BrandColor = "#4285F4", Description = "Popüler web tarayıcısı" },
                 new ProgramItem { Name = "Mozilla Firefox", WingetId = "Mozilla.Firefox", Category = "browsers", BrandColor = "#FF7139", Description = "Açık kaynak tarayıcı" },
                 new ProgramItem { Name = "Brave Browser", WingetId = "Brave.Brave", Category = "browsers", BrandColor = "#FB542B", Description = "Gizlilik odaklı tarayıcı" },
@@ -198,6 +210,7 @@ namespace WinKit
                 new ProgramItem { Name = "Vivaldi", WingetId = "VivaldiTechnologies.Vivaldi", Category = "browsers", BrandColor = "#EF3939", Description = "Özelleştirilebilir tarayıcı" },
                 new ProgramItem { Name = "Arc Browser", WingetId = "TheBrowserCompany.Arc", Category = "browsers", BrandColor = "#414CE8", Description = "Modern tarayıcı deneyimi" },
 
+                // İletişim
                 new ProgramItem { Name = "Discord", WingetId = "Discord.Discord", Category = "communication", BrandColor = "#5865F2", Description = "Oyuncu sohbet uygulaması" },
                 new ProgramItem { Name = "Telegram", WingetId = "Telegram.TelegramDesktop", Category = "communication", BrandColor = "#26A5E4", Description = "Güvenli mesajlaşma" },
                 new ProgramItem { Name = "WhatsApp", WingetId = "WhatsApp.WhatsApp", Category = "communication", BrandColor = "#25D366", Description = "Mesajlaşma uygulaması" },
@@ -207,6 +220,7 @@ namespace WinKit
                 new ProgramItem { Name = "TeamViewer", WingetId = "TeamViewer.TeamViewer", Category = "communication", BrandColor = "#004680", Description = "Uzaktan erişim" },
                 new ProgramItem { Name = "Signal", WingetId = "OpenWhisperSystems.Signal", Category = "communication", BrandColor = "#3A76F0", Description = "Şifreli mesajlaşma" },
 
+                // Oyun Platformları
                 new ProgramItem { Name = "Steam", WingetId = "Valve.Steam", Category = "gaming", BrandColor = "#1B2838", Description = "En büyük oyun platformu" },
                 new ProgramItem { Name = "Epic Games", WingetId = "EpicGames.EpicGamesLauncher", Category = "gaming", BrandColor = "#313131", Description = "Epic oyun mağazası" },
                 new ProgramItem { Name = "EA App", WingetId = "ElectronicArts.EADesktop", Category = "gaming", BrandColor = "#FF4747", Description = "EA oyun platformu" },
@@ -220,6 +234,7 @@ namespace WinKit
                 new ProgramItem { Name = "GameLoop", WingetId = "Tencent.Gameloop", Category = "gaming", BrandColor = "#00A4FF", Description = "Android emülatör" },
                 new ProgramItem { Name = "Paradox Launcher", WingetId = "ParadoxInteractive.ParadoxLauncher", Category = "gaming", BrandColor = "#DC143C", Description = "Paradox oyun platformu" },
 
+                // GPU & Sürücüler
                 new ProgramItem { Name = "NVIDIA App", WingetId = "Nvidia.GeForceExperience", Category = "gpu", BrandColor = "#76B900", Description = "NVIDIA GPU yönetimi" },
                 new ProgramItem { Name = "NVIDIA Broadcast", WingetId = "Nvidia.Broadcast", Category = "gpu", BrandColor = "#76B900", Description = "AI ses/video geliştirme" },
                 new ProgramItem { Name = "AMD Adrenalin", WingetId = "AMD.RyzenMaster", Category = "gpu", BrandColor = "#ED1C24", Description = "AMD GPU yazılımı" },
@@ -232,6 +247,7 @@ namespace WinKit
                 new ProgramItem { Name = "FurMark", WingetId = "Geeks3D.FurMark", Category = "gpu", BrandColor = "#FF5722", Description = "GPU stres testi" },
                 new ProgramItem { Name = "RivaTuner Statistics", WingetId = "Guru3D.RTSS", Category = "gpu", BrandColor = "#007ACC", Description = "FPS overlay & limiter" },
 
+                // Geliştirme
                 new ProgramItem { Name = "Visual Studio Code", WingetId = "Microsoft.VisualStudioCode", Category = "development", BrandColor = "#007ACC", Description = "Popüler kod editörü" },
                 new ProgramItem { Name = "Visual Studio 2022", WingetId = "Microsoft.VisualStudio.2022.Community", Category = "development", BrandColor = "#5C2D91", Description = "Tam özellikli IDE" },
                 new ProgramItem { Name = "Cursor", WingetId = "Anysphere.Cursor", Category = "development", BrandColor = "#000000", Description = "AI kod editörü" },
@@ -254,6 +270,7 @@ namespace WinKit
                 new ProgramItem { Name = "Eclipse Temurin JDK", WingetId = "EclipseAdoptium.Temurin.21.JDK", Category = "development", BrandColor = "#FF7800", Description = "Java Development Kit" },
                 new ProgramItem { Name = "WiX Toolset", WingetId = "WixToolset.WiX", Category = "development", BrandColor = "#FFC72C", Description = "MSI installer aracı" },
 
+                // Multimedya
                 new ProgramItem { Name = "VLC Player", WingetId = "VideoLAN.VLC", Category = "multimedia", BrandColor = "#FF8800", Description = "Evrensel oynatıcı" },
                 new ProgramItem { Name = "Spotify", WingetId = "Spotify.Spotify", Category = "multimedia", BrandColor = "#1DB954", Description = "Müzik streaming" },
                 new ProgramItem { Name = "OBS Studio", WingetId = "OBSProject.OBSStudio", Category = "multimedia", BrandColor = "#302E31", Description = "Yayın ve kayıt" },
@@ -267,6 +284,7 @@ namespace WinKit
                 new ProgramItem { Name = "ScreenToGif", WingetId = "NickeManarin.ScreenToGif", Category = "multimedia", BrandColor = "#2ECC71", Description = "GIF kayıt aracı" },
                 new ProgramItem { Name = "Adobe Creative Cloud", WingetId = "Adobe.CreativeCloud", Category = "multimedia", BrandColor = "#FF0000", Description = "Adobe uygulamaları hub" },
 
+                // Dosya Araçları
                 new ProgramItem { Name = "7-Zip", WingetId = "7zip.7zip", Category = "files", BrandColor = "#000000", Description = "Arşiv yöneticisi" },
                 new ProgramItem { Name = "WinRAR", WingetId = "RARLab.WinRAR", Category = "files", BrandColor = "#6B2D75", Description = "Arşiv yöneticisi" },
                 new ProgramItem { Name = "Everything", WingetId = "voidtools.Everything", Category = "files", BrandColor = "#FF8C00", Description = "Anında dosya arama" },
@@ -277,6 +295,7 @@ namespace WinKit
                 new ProgramItem { Name = "Syncthing", WingetId = "Syncthing.Syncthing", Category = "files", BrandColor = "#0891D1", Description = "Dosya senkronizasyonu" },
                 new ProgramItem { Name = "Duplicate Cleaner", WingetId = "DigitalVolcano.DuplicateCleaner", Category = "files", BrandColor = "#E74C3C", Description = "Yinelenen dosya bulucu" },
 
+                // Sistem Araçları
                 new ProgramItem { Name = "PowerToys", WingetId = "Microsoft.PowerToys", Category = "system", BrandColor = "#0078D4", Description = "Windows güç araçları" },
                 new ProgramItem { Name = "CPU-Z", WingetId = "CPUID.CPU-Z", Category = "system", BrandColor = "#0066CC", Description = "İşlemci bilgisi" },
                 new ProgramItem { Name = "HWMonitor", WingetId = "CPUID.HWMonitor", Category = "system", BrandColor = "#2ECC71", Description = "Sıcaklık izleme" },
@@ -290,6 +309,7 @@ namespace WinKit
                 new ProgramItem { Name = "Razer Synapse 3", WingetId = "Razer.Synapse3", Category = "system", BrandColor = "#00FF00", Description = "Razer cihaz yönetimi" },
                 new ProgramItem { Name = "Cheat Engine", WingetId = "CheatEngine.CheatEngine", Category = "system", BrandColor = "#FF0000", Description = "Memory scanner & debugger" },
 
+                // Güvenlik & VPN
                 new ProgramItem { Name = "Bitwarden", WingetId = "Bitwarden.Bitwarden", Category = "security", BrandColor = "#175DDC", Description = "Şifre yöneticisi" },
                 new ProgramItem { Name = "Proton VPN", WingetId = "ProtonTechnologies.ProtonVPN", Category = "security", BrandColor = "#6D4AFF", Description = "Güvenli VPN" },
                 new ProgramItem { Name = "NordVPN", WingetId = "NordVPN.NordVPN", Category = "security", BrandColor = "#4687FF", Description = "Popüler VPN" },
@@ -298,6 +318,7 @@ namespace WinKit
                 new ProgramItem { Name = "Cloudflare WARP", WingetId = "Cloudflare.Warp", Category = "security", BrandColor = "#F48120", Description = "Hızlı DNS & VPN" },
                 new ProgramItem { Name = "WireGuard", WingetId = "WireGuard.WireGuard", Category = "security", BrandColor = "#88171A", Description = "Modern VPN protokolü" },
 
+                // Ofis & Üretkenlik
                 new ProgramItem { Name = "Notion", WingetId = "Notion.Notion", Category = "office", BrandColor = "#000000", Description = "Not ve proje yönetimi" },
                 new ProgramItem { Name = "Obsidian", WingetId = "Obsidian.Obsidian", Category = "office", BrandColor = "#7C3AED", Description = "Markdown notlar" },
                 new ProgramItem { Name = "Adobe Reader", WingetId = "Adobe.Acrobat.Reader.64-bit", Category = "office", BrandColor = "#EC1C24", Description = "PDF okuyucu" },

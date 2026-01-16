@@ -8,10 +8,9 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>WinKit</AssemblyName>
     <RootNamespace>WinKit</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>kayapater</Authors>
-    <Description>Windows post-installation app installer</Description>
-    <ApplicationIcon>Resources\winkit.ico</ApplicationIcon>
+    <Description>Windows Post-Installation App Installer</Description>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -26,8 +25,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\Icons\*.png" />
-    <Resource Include="Resources\winkit.ico" />
-    <Resource Include="Resources\winkit.png" />
+    <Resource Include="Resources\Icons\*.svg" />
   </ItemGroup>
 
 </Project>
