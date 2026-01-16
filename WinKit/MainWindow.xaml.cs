@@ -331,13 +331,14 @@ namespace WinKit
 
             foreach (var category in _categories)
             {
-                CategoryList.Items.Add(new TextBlock
+                var textBlock = new TextBlock
                 {
                     Text = $"{category.Icon}  {category.Name}",
-                    Foreground = (SolidColorBrush)FindResource("TextPrimaryBrush"),
                     FontSize = 13,
                     Tag = category.Id
-                });
+                };
+                textBlock.SetResourceReference(TextBlock.ForegroundProperty, "TextPrimaryBrush");
+                CategoryList.Items.Add(textBlock);
             }
 
             CategoryList.SelectedIndex = 0;
@@ -462,6 +463,45 @@ namespace WinKit
             });
         }
 
+        private void UpdateOverlayProgress(string appName, int current, int total, int success, int fail)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                double percent = total > 0 ? (double)current / total * 100 : 0;
+                
+                OverlayAppName.Text = appName;
+                OverlayAppStatus.Text = "Kuruluyor...";
+                OverlayProgressBar.Width = 356 * (percent / 100); // 420 - 64 padding
+                OverlayProgressText.Text = $"{current} / {total}";
+                OverlayPercentText.Text = $"{(int)percent}%";
+                OverlaySuccessCount.Text = $"{success} başarılı";
+                OverlayFailCount.Text = $"{fail} başarısız";
+            });
+        }
+
+        private void ShowInstallOverlay()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                InstallOverlay.Visibility = Visibility.Visible;
+            });
+        }
+
+        private void HideInstallOverlay()
+        {
+            Dispatcher.Invoke(() =>
+            {
+                InstallOverlay.Visibility = Visibility.Collapsed;
+            });
+        }
+
+        private void CancelInstall_Click(object sender, RoutedEventArgs e)
+        {
+            _cancellationTokenSource?.Cancel();
+            CancelInstallBtn.IsEnabled = false;
+            OverlayAppStatus.Text = "İptal ediliyor...";
+        }
+
         private async void InstallWingetAutomatically()
         {
             StatusText.Text = "Winget kuruluyor...";
@@ -561,11 +601,15 @@ namespace WinKit
             _cancellationTokenSource = new CancellationTokenSource();
 
             InstallBtn.IsEnabled = false;
+            CancelInstallBtn.IsEnabled = true;
+            ShowInstallOverlay();
 
             int successCount = 0;
             int failCount = 0;
             int currentIndex = 0;
             int total = selectedPrograms.Count;
+
+            UpdateOverlayProgress(selectedPrograms[0].Name, 0, total, 0, 0);
 
             foreach (var program in selectedPrograms)
             {
@@ -573,8 +617,8 @@ namespace WinKit
                     break;
 
                 currentIndex++;
-                double percent = (double)(currentIndex - 1) / total * 100;
-                UpdateProgress(percent, $"{program.Name} kuruluyor... ({currentIndex}/{total})");
+                UpdateOverlayProgress(program.Name, currentIndex, total, successCount, failCount);
+                UpdateProgress((double)(currentIndex - 1) / total * 100, $"{program.Name} kuruluyor...");
 
                 try
                 {
@@ -615,10 +659,11 @@ namespace WinKit
                     failCount++;
                 }
 
-                UpdateProgress((double)currentIndex / total * 100, $"{program.Name} - {(failCount > 0 ? "başarısız" : "tamamlandı")}");
+                UpdateOverlayProgress(program.Name, currentIndex, total, successCount, failCount);
                 await Task.Delay(100);
             }
 
+            HideInstallOverlay();
             _isInstalling = false;
             UpdateSelectedCount();
             UpdateProgress(100, $"Tamamlandı: {successCount} başarılı, {failCount} başarısız");

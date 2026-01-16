@@ -14,6 +14,9 @@
         <local:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
         <local:StringToColorConverter x:Key="StringToColor"/>
         
+        <!-- Card Shadow Effect -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="30" ShadowDepth="0" Opacity="0.3" Color="Black"/>
+        
         <!-- Modern ScrollBar Style -->
         <Style x:Key="ModernScrollBarThumb" TargetType="Thumb">
             <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -126,6 +129,7 @@
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsSelected" Value="True">
                                                 <Setter TargetName="Bd" Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                                <Setter Property="Foreground" Value="White"/>
                                             </Trigger>
                                             <MultiTrigger>
                                                 <MultiTrigger.Conditions>
@@ -346,5 +350,102 @@
                 </Grid>
             </Border>
         </Grid>
+
+        <!-- Installation Progress Overlay -->
+        <Border x:Name="InstallOverlay" Grid.ColumnSpan="2" 
+                Background="#80000000" Visibility="Collapsed">
+            <Border Background="{DynamicResource CardBrush}" 
+                    CornerRadius="16" 
+                    VerticalAlignment="Center" 
+                    HorizontalAlignment="Center"
+                    MinWidth="420" MaxWidth="500"
+                    Padding="32"
+                    Effect="{StaticResource CardShadow}">
+                <StackPanel>
+                    <!-- Header -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,24">
+                        <TextBlock Text="⚡" FontSize="28" VerticalAlignment="Center"/>
+                        <TextBlock Text="Kurulum Devam Ediyor" FontSize="20" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextPrimaryBrush}" 
+                                   Margin="12,0,0,0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                    
+                    <!-- Current App Icon & Name -->
+                    <Border Background="{DynamicResource HoverBrush}" CornerRadius="12" Padding="16" Margin="0,0,0,20">
+                        <StackPanel>
+                            <TextBlock x:Name="OverlayAppName" Text="Uygulama Adı" 
+                                       FontSize="16" FontWeight="Medium"
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="OverlayAppStatus" Text="İndiriliyor..." 
+                                       FontSize="12" Margin="0,4,0,0"
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Progress Bar -->
+                    <Grid Height="8" Margin="0,0,0,12">
+                        <Border Background="{DynamicResource ProgressBgBrush}" CornerRadius="4"/>
+                        <Border x:Name="OverlayProgressBar" Background="{DynamicResource AccentBrush}" 
+                                CornerRadius="4" HorizontalAlignment="Left" Width="0"/>
+                    </Grid>
+                    
+                    <!-- Progress Text -->
+                    <Grid>
+                        <TextBlock x:Name="OverlayProgressText" Text="0 / 0" 
+                                   FontSize="13" FontWeight="Medium"
+                                   Foreground="{DynamicResource TextSecondaryBrush}"
+                                   HorizontalAlignment="Left"/>
+                        <TextBlock x:Name="OverlayPercentText" Text="0%" 
+                                   FontSize="13" FontWeight="Medium"
+                                   Foreground="{DynamicResource AccentBrush}"
+                                   HorizontalAlignment="Right"/>
+                    </Grid>
+                    
+                    <!-- Completed Apps Summary -->
+                    <Border Background="{DynamicResource HoverBrush}" CornerRadius="8" 
+                            Padding="12" Margin="0,20,0,0">
+                        <Grid>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock Text="✓" Foreground="#4CAF50" FontSize="14" FontWeight="Bold"/>
+                                <TextBlock x:Name="OverlaySuccessCount" Text="0 başarılı" 
+                                           FontSize="12" Margin="6,0,0,0"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="✕" Foreground="#F44336" FontSize="14" FontWeight="Bold"/>
+                                <TextBlock x:Name="OverlayFailCount" Text="0 başarısız" 
+                                           FontSize="12" Margin="6,0,0,0"
+                                           Foreground="{DynamicResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Cancel Button -->
+                    <Button x:Name="CancelInstallBtn" Content="İptal Et" 
+                            Click="CancelInstall_Click" Margin="0,24,0,0"
+                            Padding="20,10" HorizontalAlignment="Center" Cursor="Hand">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="border" Background="Transparent" 
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1" CornerRadius="8" 
+                                        Padding="{TemplateBinding Padding}">
+                                    <TextBlock Text="{TemplateBinding Content}" 
+                                               FontSize="13" 
+                                               Foreground="{DynamicResource TextSecondaryBrush}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="border" Property="Background" Value="{DynamicResource HoverBrush}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </Border>
+        </Border>
     </Grid>
 </Window>
